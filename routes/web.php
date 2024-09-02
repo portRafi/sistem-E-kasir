@@ -16,6 +16,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\laporanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,10 +86,6 @@ Route::post('/reset-password', function (Request $request) {
 })->middleware('guest')->name('password.update');
 // end bagian lupa pass
 
-
-
-
-
 Route::get('/daftar', [AuthController::class, 'index']);
 Route::post('/user/daftar', [AuthController::class, 'store'])->name('store');
 
@@ -105,7 +103,7 @@ Route::get('/loginw', function () {
 Route::get('/forgot/password', [AuthController::class, 'forgotPw']);
 
 Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
-    Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('index');
     
     Route::get('/admin/kategori', [KategoriController::class, 'index']);
     Route::post('/admin/kategori/store', [KategoriController::class, 'store']);
@@ -135,6 +133,8 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
     Route::get('/admin/laporan/{kodeTransaksi}', [TransaksiController::class, 'show']);
     
     Route::get('/admin/user', [UserController::class, 'index']);
+    Route::post('/admin/view-pdf', [TransaksiController::class, 'viewPDF'])->name('view-pdf');
+    Route::post('/admin/download-pdf', [TransaksiController::class, 'downloadPDF'])->name('download-pdf');
     Route::post('/admin/user/store', [UserController::class, 'store']);
     Route::get('/admin/user/{id}/edit', [UserController::class, 'edit']);
     Route::put('/admin/user/{id}', [UserController::class, 'update']);
@@ -144,8 +144,9 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
 });
 
 Route::group(['middleware' => ['auth', 'ceklevel:admin,kasir']], function(){
-    Route::get('/kasir/dashboard', [DashboardController::class, 'index']);
+    Route::get('/kasir/dashboard', [DashboardController::class, 'index'])->name('index');
     
+    Route::get('/kasir/report', [TransaksiController::class, 'index']);
     Route::get('/kasir/penjualan', [TransaksiSementaraController::class, 'index']);
     Route::post('/kasir/penjualan/store', [TransaksiSementaraController::class, 'store']);
     Route::post('/kasir/penjualan/bayar/{kodeTransaksi}', [TransaksiSementaraController::class, 'bayar']);
@@ -158,3 +159,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,kasir']], function(){
     Route::put('/kasir/profile/{id}', [ProfileController::class, 'update']);
     
 });
+
+// export PDF
+    Route::get('/exportpdf', [EmployeeController::class, 'index'])->name('exportpdf');
+    Route::get('/exportexcel', [EmployeeController::class, 'exportexcel'])->name('exportexcel');

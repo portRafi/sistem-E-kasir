@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', ' - Laporan')
+@section('title', ' - report')
 
 @section('content')
 <section class="section">
@@ -33,14 +33,6 @@
                                         <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-search"></i> Cari</button>
                                     </div>
                                 </div>
-
-                            <div class="col-auto">
-                                <a href="/exportpdf" class="btn btn-info">Download PDF</a>
-                            </div>
-                            <div class="col-auto">
-                                <a href="/exportexcel" class="btn btn-success">Export Excel</a>
-                            </div>
-
                             </div>
                         </form>
                     </div>
@@ -80,7 +72,7 @@
         
                                    
                                                            
-                                        <a href="/{{auth()->user()->level}}/laporan/{{$item->kode_transaksi}}"
+                                        <a href="/{{auth()->user()->level}}/report/{{$item->kode_transaksi}}"
                                             class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i> Detail</a>
                                         <a href="/{{auth()->user()->level}}/laporan/{{$item->kode_transaksi}}/print" target="_blank"
                                             class="btn btn-sm btn-outline-danger"><i class="fa fa-print"></i> Print</a>

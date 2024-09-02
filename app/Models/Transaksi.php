@@ -20,8 +20,9 @@ class Transaksi extends Model
         'kode_kasir',
     ];
 
-    public function user()
+    public function produk()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Produk::class, 'transaksi_produk')->withPivot('jumlah', 'total');
     }
+
 }

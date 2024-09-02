@@ -198,6 +198,21 @@ CREATE TABLE `transaksi_sementaras` (
 
 -- --------------------------------------------------------
 
+-- Struktur dari tabel transaksi_produks
+
+CREATE TABLE transaksi_produk (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    transaksi_id INT NOT NULL,
+    produk_id INT NOT NULL,
+    jumlah INT NOT NULL,
+    subtotal DECIMAL(15,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (transaksi_id) REFERENCES transaksi(id) ON DELETE CASCADE,
+    FOREIGN KEY (produk_id) REFERENCES produk(id) ON DELETE CASCADE
+);
+
+
 --
 -- Struktur dari tabel `users`
 --

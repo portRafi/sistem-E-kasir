@@ -72,7 +72,7 @@ class AuthController extends Controller
             }
         }
         else {
-            return back()->with('gagal', 'Email atau Password salah!');
+            return back()->with('galagal', 'Email atau Password sah!');
         }
     }
 

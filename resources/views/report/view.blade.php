@@ -1,17 +1,17 @@
 @extends('layout.app')
 
-@section('title', ' - Detail Laporan')
+@section('title', ' - Detail report')
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Laporan</h1>
+        <h1>report</h1>
     </div>
 
     <div class="section-body">
         <div class="card shadow">
             <div class="card-header bg-white">
-            <h4 class="text-primary">Detail Laporan</h4>
+            <h4 class="text-primary">Detail report</h4>
             </div>
             <div class="card-body">
                 <table class="table table-hover" id="table">
@@ -43,7 +43,7 @@
                 </table>
             </div>
             <div class="card-footer bg-white">
-                <a href="/{{auth()->user()->level}}/laporan" class="btn btn-sm btn-outline-warning"><i class="fas fa-caret-left"></i> Kembali</a>
+                <a href="/{{auth()->user()->level}}/report" class="btn btn-sm btn-outline-warning"><i class="fas fa-caret-left"></i> Kembali</a>
             </div>
         </div>
     </div>

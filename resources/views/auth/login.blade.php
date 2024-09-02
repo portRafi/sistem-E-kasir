@@ -105,7 +105,7 @@
         iziToast.success({
             title: 'Password Reset!',
             message: '{{session('status')}}',
-            position: 'topRight'
+            position: 'topLeft'
         });
     </script>
     @elseif(session('gagal'))
@@ -113,7 +113,7 @@
         iziToast.error({
             title: 'Gagal Login!',
             message: '{{session('gagal')}}',
-            position: 'topRight'
+            position: 'topLeft'
         });
     </script>
     @elseif(session('sukses'))
@@ -121,7 +121,7 @@
         iziToast.success({
             title: 'Sukses!',
             message: '{{session('sukses')}}',
-            position: 'topRight'
+            position: 'topLeft'
         });
     </script>
     @endif

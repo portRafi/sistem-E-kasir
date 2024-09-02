@@ -129,7 +129,7 @@
         $('#data-table').DataTable();
     });
 
-    var colors = ['#FCFF52', '#ffff']; // Array of colors
+    var colors = ['#2596be', '#ffff']; // Array of colors
     var lastColorIndex = -1; // Initialize last color index
 
     function changeBackgroundColor() {

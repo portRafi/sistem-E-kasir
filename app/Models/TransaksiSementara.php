@@ -13,6 +13,7 @@ class TransaksiSementara extends Model
     use HasFormatRupiah;
 
     protected $fillable = [
+        
         'kode_transaksi',
         'barang_id',
         'harga',

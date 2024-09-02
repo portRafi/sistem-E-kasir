@@ -61,6 +61,7 @@ class TransaksiSementaraController extends Controller
             return redirect('/' . $user->level . '/penjualan')->with('warning', 'Barang Yang Sama Sudah Tersedia');
         }else{
             $transaksi_sementara = new TransaksiSementara;
+          
             $transaksi_sementara->kode_transaksi = $request->kode_transaksi;
             $transaksi_sementara->barang_id = $request->barang_id;
             $transaksi_sementara->harga = $request->harga;
@@ -101,7 +102,7 @@ class TransaksiSementaraController extends Controller
 
         if($barang->stok >= $data['jumlah']){
             $sub_total = ($data['harga'] - ($data['diskon'] * $data['harga'] / 100)) * $data['jumlah'];
-    
+            
             $transaksi_sementara = TransaksiSementara::find($id);
             $transaksi_sementara->jumlah = $request->jumlah;
             $transaksi_sementara->total = $sub_total;
@@ -151,6 +152,7 @@ class TransaksiSementaraController extends Controller
         {
             try{
                 $request->validate([
+                    
                     'kode_transaksi' => 'required|string|max:255',
                     'total' => 'required|numeric',
                     'bayar' => 'required|numeric',
@@ -161,6 +163,7 @@ class TransaksiSementaraController extends Controller
 
                 $tanggalSekarang = now('Asia/Jakarta')->format('Y-m-d H:i:s');
                 $transaksi = new Transaksi;
+               
                 $transaksi->kode_transaksi = $request->kode_transaksi;
                 $transaksi->total = $request->total;
                 $transaksi->bayar = $request->bayar;
@@ -177,6 +180,7 @@ class TransaksiSementaraController extends Controller
                         $barang->update(['stok' => $kurangi]);
 
                         TransaksiDetail::create([
+                            
                             'kode_transaksi' => $data->kode_transaksi,
                             'barang' => $barang->nama,
                             'harga' => $data->harga,

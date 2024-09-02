@@ -1,3 +1,6 @@
+
+
+
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
@@ -23,9 +26,12 @@
                 <a href="/{{auth()->user()->level}}/barang" class="nav-link"><i class="fas fa-boxes"></i><span>Barang</span></a>
             </li>
             @endif
-            @if(auth()->user()->level == 'kasir')
+            @if(auth()->user()->level == 'kasir')   
             <li class="dropdown">
                 <a href="/{{auth()->user()->level}}/penjualan" class="nav-link"><i class="fas fa-shopping-cart"></i><span>Transaksi</span></a>
+            </li>
+            <li class="dropdown">
+                <a href="/{{auth()->user()->level}}/report" class="nav-link"><i class="fas fa-file"></i><span>laporan</span></a>
             </li>
             @endif
             @if(auth()->user()->level == 'admin')

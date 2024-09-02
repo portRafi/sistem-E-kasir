@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaksi_sementaras', function (Blueprint $table) {
             $table->id();
+            // Use string instead of varchar
             $table->string('kode_transaksi');
             $table->integer('barang_id');
             $table->float('harga');

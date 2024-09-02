@@ -79,7 +79,7 @@
                                                 <label class="control-label text-info" for="Level">Login sebagai</label>
                                                 <select class="custom-select" name="level" id="">
                                                     <option value=""></option>
-                                                   
+                                                    <option value="admin">admin</option>
                                                     <option value="kasir">kasir</option>
                                                     
                                                     
