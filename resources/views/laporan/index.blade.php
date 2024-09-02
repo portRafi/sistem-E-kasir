@@ -35,12 +35,15 @@
                                 </div>
 
                             <div class="col-auto">
-                                <a href="/exportpdf" class="btn btn-info">Download PDF</a>
+                                <a href="/exportpdf" class="btn btn-info bx bxs-download">Download PDF</a>
                             </div>
                             <div class="col-auto">
-                                <a href="/exportexcel" class="btn btn-success">Export Excel</a>
+                                <a href="/exportexcel" class="btn btn-success ">Export Excel</a>
                             </div>
 
+                            <div class="col-auto">
+                                <a href="/" class="btn btn-warning bx bx-low-vision">View PDF</a>
+                            </div>
                             </div>
                         </form>
                     </div>
