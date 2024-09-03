@@ -24,8 +24,8 @@ class EmployeeController extends Controller
         $pdf = PDF::loadview('tes');
 
         return $pdf-> download('data.pdf');
-    }
-
+		
+	}
     /**
      * Show the form for creating a new resource.
      */
@@ -73,11 +73,9 @@ class EmployeeController extends Controller
     {
         //
     }
-
+    
     public function exportexcel(){
         return Excel::download(new EmployeeExport,'index.xlsx');
         
     }
-
-    
 }
