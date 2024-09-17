@@ -48,6 +48,13 @@ class TransaksiController extends Controller
         
         return view('laporan.view', compact('data'));
     }
+    
+    public function hiden($kodeTransaksi)
+    {
+        $data = TransaksiDetail::where('kode_transaksi', $kodeTransaksi)->get();
+        
+        return view('report.view', compact('data'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -73,14 +80,25 @@ class TransaksiController extends Controller
         
     }
 
+    public function printPDF($transaksi_invoice)
+     {
+        $transaksi_invoice = TransaksiInvoice::where('print_pdf', $transaksi_invoice)->get(); 
+
+        $pdf = Pdf::loadView('laporan.print', compact('transaksi_invoice'));
+        return $pdf->stream();
+
+    }
+
     public function print($kode_transaksi)
      {
         $id_transaksi = Transaksi::where('kode_transaksi', $kode_transaksi)->first();
         $transaksi = Transaksi::find($id_transaksi->id);
         $transaksi_detail = TransaksiDetail::where('kode_transaksi', $kode_transaksi)->get();
+        $transaksi_invoice = TransaksiInvoice::where('kode_transaksi', $kode_transaksi)->get(); 
 
         $pdf = Pdf::loadView('laporan.print', compact('transaksi', 'transaksi_detail'));
         return $pdf->stream();
+
     }
     
     public function cari(Request $request)

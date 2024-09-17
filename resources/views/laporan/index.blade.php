@@ -33,16 +33,11 @@
                                         <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-search"></i> Cari</button>
                                     </div>
                                 </div>
-
-                            <div class="col-auto">
-                                <a href="/exportpdf" class="btn btn-info bx bxs-download">Download PDF</a>
+                                <div class="col-auto">
+                                <a href="/exportpdf" class="btn btn-info">Download PDF</a>
                             </div>
                             <div class="col-auto">
                                 <a href="/exportexcel" class="btn btn-success ">Export Excel</a>
-                            </div>
-
-                            <div class="col-auto">
-                                <a href="/" class="btn btn-warning bx bx-low-vision">View PDF</a>
                             </div>
                             </div>
                         </form>
@@ -72,7 +67,6 @@
                                 @foreach($transaksi as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    
                                     <td>{{$item->kode_transaksi}}</td>
                                     <td>{{$item->tanggal}}</td>
                                     <td>{{$item->kode_kasir}}</td>
@@ -80,9 +74,7 @@
                                     <td>{{$item->formatRupiah('bayar')}}</td>
                                     <td>{{$item->formatRupiah('kembali')}}</td>
                                     <td>
-        
-                                   
-                                                           
+                    
                                         <a href="/{{auth()->user()->level}}/laporan/{{$item->kode_transaksi}}"
                                             class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i> Detail</a>
                                         <a href="/{{auth()->user()->level}}/laporan/{{$item->kode_transaksi}}/print" target="_blank"

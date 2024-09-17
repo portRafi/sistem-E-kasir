@@ -133,7 +133,9 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
     Route::get('/admin/laporan/{dari}/{sampai}/print', [TransaksiController::class, 'printTanggal']);
     Route::get('/admin/laporan/{kodeTransaksi}/print', [TransaksiController::class, 'print']);
     Route::get('/admin/laporan/{kodeTransaksi}', [TransaksiController::class, 'show']);
-    
+    Route::get('/admin/laporan/print', [TransaksiController::class, 'printPDF']);
+
+
     Route::get('/admin/user', [UserController::class, 'index']);
     Route::post('/admin/view-pdf', [TransaksiController::class, 'viewPDF'])->name('view-pdf');
     Route::post('/admin/download-pdf', [TransaksiController::class, 'downloadPDF'])->name('download-pdf');
@@ -147,7 +149,6 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
 
 Route::group(['middleware' => ['auth', 'ceklevel:admin,kasir']], function(){
     Route::get('/kasir/dashboard', [DashboardController::class, 'index'])->name('index');
-    
     Route::get('/kasir/report', [TransaksiController::class, 'index']);
     Route::get('/kasir/penjualan', [TransaksiSementaraController::class, 'index']);
     Route::post('/kasir/penjualan/store', [TransaksiSementaraController::class, 'store']);
@@ -159,6 +160,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,kasir']], function(){
     Route::put('/kasir/transaksi-sementara/{id}/{barang_id}/edit', [TransaksiSementaraController::class, 'update']);
     Route::get('/kasir/profile/{id}', [ProfileController::class, 'edit']);
     Route::put('/kasir/profile/{id}', [ProfileController::class, 'update']);
+    Route::get('/kasir/laporan/{kodeTransaksi}', [TransaksiController::class, 'hiden']);
     
 });
 
