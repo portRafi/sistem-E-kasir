@@ -84,6 +84,5 @@
                 }
             });
     }
-
 </script>
 @endpush

@@ -20,7 +20,10 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\laporanController;
 use App\Exports\EmployeeExport;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Http\Controllers\TransaksiInvoiceController;
+use App\Http\Controllers\PromoController;
+use App\Http\Controllers\PromoController as ControllersPromoController;
+use App\Http\Controllers\StokMasukController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -128,7 +131,7 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
     
     Route::get('/admin/laporan', [TransaksiController::class, 'index']);
     Route::get('/admin/laporan/cari', [TransaksiController::class, 'cari']);
-
+    Route::get('admin/laporan/transaksi-invoice', [TransaksiInvoiceController::class, 'index']);
     
     Route::get('/admin/laporan/{dari}/{sampai}/print', [TransaksiController::class, 'printTanggal']);
     Route::get('/admin/laporan/{kodeTransaksi}/print', [TransaksiController::class, 'print']);
@@ -145,6 +148,24 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin']], function(){
     Route::get('/admin/user/{id}', [UserController::class, 'destroy']);
     Route::get('/admin/profile/{id}', [ProfileController::class, 'edit']);
     Route::put('/admin/profile/{id}', [ProfileController::class, 'update']);
+
+    Route::middleware(['auth', 'cekLevel:admin'])->prefix('{level}')->group(function () {
+        Route::resource('promo', PromoController::class);
+    });
+    Route::get('/{level}/promo/{promo}/edit', [PromoController::class, 'edit'])->name('promo.edit');
+    Route::put('/{level}/promo/{id}', [PromoController::class, 'update'])->name('promo.update');
+    Route::delete('/{level}/promo/{id}', [PromoController::class, 'destroy'])->name('promo.destroy');
+
+    Route::get('/{level}/promo', [PromoController::class, 'index'])->name('promo.index');
+    Route::post('/promo', [PromoController::class, 'store'])->name('promo.store');
+    Route::resource('/admin/promo', PromoController::class)->middleware(['auth', 'cekLevel:admin']);
+    Route::get('/admin/promo/create', [PromoController::class, 'create']);
+    Route::post('/admin/promo/store', [PromoController::class, 'store']);
+    Route::get('/admin/promo/{id}/show', [PromoController::class, 'show']);
+    Route::resource('/admin/promo', PromoController::class);
+    Route::get('/admin/promo/{id}/edit', [PromoController::class, 'edit']);
+    Route::put('/admin/promo/{id}', [PromoController::class, 'update']);
+    Route::get('/admin/promo/{id}', [PromoController::class, 'destroy']);
 });
 
 Route::group(['middleware' => ['auth', 'ceklevel:admin,kasir']], function(){
@@ -167,3 +188,6 @@ Route::group(['middleware' => ['auth', 'ceklevel:admin,kasir']], function(){
 // export PDF
     Route::get('/exportpdf', [EmployeeController::class, 'index'])->name('exportpdf');
     Route::get('/exportexcel', [EmployeeController::class, 'exportexcel'])->name('exportexcel');
+
+    Route::get('stok-masuk/create', [StokMasukController::class, 'create'])->name('stok-masuk.create');
+    Route::post('stok-masuk', [StokMasukController::class, 'store'])->name('stok-masuk.store');

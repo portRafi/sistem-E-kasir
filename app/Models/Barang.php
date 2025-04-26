@@ -26,8 +26,6 @@ class Barang extends Model
         'stok',
     ];
 
-    protected $guarded = [];
-
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
@@ -52,4 +50,14 @@ class Barang extends Model
     {
         return $this->hasMany(TransaksiDetail::class);
     }
+        public function promo()
+    {
+        return $this->hasOne(Promo::class);
+    }
+
+        public function stokMasuk()
+    {
+        return $this->hasMany(StokMasuk::class);
+    }
+
 }

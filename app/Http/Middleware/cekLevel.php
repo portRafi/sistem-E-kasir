@@ -24,4 +24,5 @@ class cekLevel
 
         abort(403, 'unauthorize');
     }
+    
 }

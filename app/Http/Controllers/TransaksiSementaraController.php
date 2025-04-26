@@ -6,6 +6,7 @@ use App\Models\TransaksiSementara;
 use App\Models\TransaksiDetail;
 use App\Models\Transaksi;
 use App\Models\Barang;
+use App\Models\Promo ;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -19,22 +20,23 @@ class TransaksiSementaraController extends Controller
     public function index()
     {
         $barang = Barang::all();
-        $transaksi_sementara = TransaksiSementara::all();
+        $transaksi_sementara = TransaksiSementara::latest()->get();
         $now = Carbon::now();
         $tahun_bulan = $now->year . $now->month;
         $cek = Transaksi::count();
-        
-        if($cek == 0){
+
+        if ($cek == 0) {
             $urut = 10000001;
             $nomor = $tahun_bulan . $urut;
-        }else {
-            $ambil = Transaksi::all()->last();
+        } else {
+            $ambil = Transaksi::latest()->first();
             $urut = (int)substr($ambil->kode_transaksi, -8) + 1;
             $nomor = $tahun_bulan . $urut;
         }
 
         return view('penjualan.index', compact('barang', 'transaksi_sementara', 'nomor'));
-    }
+    
+}
 
     /**
      * Show the form for creating a new resource.
@@ -48,31 +50,46 @@ class TransaksiSementaraController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
+    $data = $request->all();
+    $sub_total = ($data['harga'] - ($data['diskon'] * $data['harga'] / 100)) * $data['jumlah'];
 
-        $data = $request->all();
+    $barangAda = TransaksiSementara::where('barang_id', $request->barang_id)->first();
+    
+    if($barangAda) {
+        return redirect('/' . $user->level . '/penjualan')->with('warning', 'Barang Yang Sama Sudah Tersedia');
+    } else {
+        $transaksi_sementara = new TransaksiSementara;
+        $transaksi_sementara->kode_transaksi = $request->kode_transaksi;
+        $transaksi_sementara->barang_id = $request->barang_id;
+        $transaksi_sementara->harga = $request->harga;
+        $transaksi_sementara->jumlah = $request->jumlah;
+        $transaksi_sementara->diskon = $request->diskon;
+        $transaksi_sementara->total = $sub_total;
+        $transaksi_sementara->save();
 
-        $sub_total = ($data['harga'] - ($data['diskon'] * $data['harga'] / 100)) * $data['jumlah'];
+        //  memeriksa apakah barang yang ditambahkan memenuhi syarat promo
+        $promo = $this->cekPromo($request->barang_id, $request->jumlah);
+       // Menghitung jumlah bonus berdasarkan aturan promo
+        if ($promo) {
+            $bonus_qty = floor($request->jumlah / $promo->jumlah_beli) * $promo->jumlah_bonus;
 
-        $barangAda = TransaksiSementara::where('barang_id', $request->barang_id)->first();
-        
-        if($barangAda) {
-            return redirect('/' . $user->level . '/penjualan')->with('warning', 'Barang Yang Sama Sudah Tersedia');
-        }else{
-            $transaksi_sementara = new TransaksiSementara;
-          
-            $transaksi_sementara->kode_transaksi = $request->kode_transaksi;
-            $transaksi_sementara->barang_id = $request->barang_id;
-            $transaksi_sementara->harga = $request->harga;
-            $transaksi_sementara->jumlah = $request->jumlah;
-            $transaksi_sementara->diskon = $request->diskon;
-            $transaksi_sementara->total = $sub_total;
-            $transaksi_sementara->save();
+            TransaksiSementara::create([
+                'kode_transaksi' => $request->kode_transaksi, 
+                'barang_id' => $promo->barang_bonus_id,
+                'jumlah' => $bonus_qty,
+                'harga' => 0,
+                'total' => 0,
+                'diskon' => 0,
+                'status' => 'bonus'
+            ]);
         }
-        
-        return redirect('/' . $user->level . '/penjualan');
     }
+
+    return redirect('/' . $user->level . '/penjualan');
+}
+
 
     /**
      * Display the specified resource.
@@ -112,8 +129,6 @@ class TransaksiSementaraController extends Controller
         }else{
             return redirect('/' . $user->level . '/penjualan')->with('gagal', $barang->nama . ' hanya tersisa ' . $barang->stok);
         }
-
-
     }
 
     /**
@@ -199,4 +214,18 @@ class TransaksiSementaraController extends Controller
             return redirect('/' . $user->level . '/penjualan')->with('berhasil', $kode_transaksi);
         }
     }
+
+private function cekPromo($barang_id, $jumlah_beli)
+{
+    $promo = Promo::where('barang_beli_id', $barang_id)
+                ->whereDate('berlaku_sampai', '>=', now())
+                ->first();
+
+    if ($promo && $jumlah_beli >= $promo->jumlah_beli) {
+        return $promo;
+    }
+
+    return null;
+}
+
 }

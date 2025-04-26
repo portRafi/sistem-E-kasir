@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use App\Models\Promo as PromoModel;
 
 class TransaksiController extends Controller
 {
@@ -23,6 +24,31 @@ class TransaksiController extends Controller
         return view('laporan.index', compact('transaksi'));
     }
 
+    public function tambahBarang(Request $request)
+{
+    // Ambil barang yang dibeli user
+    $barangId = $request->barang_id;
+    $jumlah = $request->jumlah;
+
+    // Simpan ke keranjang (contoh kode keranjang kamu sendiri)
+    // session()->push('cart', ['id' => $barangId, 'qty' => $jumlah]);
+
+    // Cek apakah ada promo aktif
+    $promo = Promo::where('barang_beli_id', $barangId)
+        ->where('berlaku_sampai', '>=', Carbon::today())
+        ->first();
+
+    if ($promo && $jumlah >= $promo->jumlah_beli) {
+        // Hitung berapa kali promo terpenuhi
+        $bonusTimes = intdiv($jumlah, $promo->jumlah_beli);
+        $jumlahBonus = $promo->jumlah_bonus * $bonusTimes;
+
+        // Tambahkan barang bonus ke keranjang (contoh)
+        // session()->push('cart', ['id' => $promo->barang_bonus_id, 'qty' => $jumlahBonus, 'bonus' => true]);
+    }
+
+    return back()->with('success', 'Barang ditambahkan ke keranjang');
+}
     /**
      * Show the form for creating a new resource.
      */
@@ -94,7 +120,6 @@ class TransaksiController extends Controller
         $id_transaksi = Transaksi::where('kode_transaksi', $kode_transaksi)->first();
         $transaksi = Transaksi::find($id_transaksi->id);
         $transaksi_detail = TransaksiDetail::where('kode_transaksi', $kode_transaksi)->get();
-        $transaksi_invoice = TransaksiInvoice::where('kode_transaksi', $kode_transaksi)->get(); 
 
         $pdf = Pdf::loadView('laporan.print', compact('transaksi', 'transaksi_detail'));
         return $pdf->stream();

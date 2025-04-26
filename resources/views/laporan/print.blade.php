@@ -81,7 +81,7 @@
 <body>
     <div class="transaksi-container">
         <div class="transaksi-header">
-            <h2>Transaksi</h2>
+            <h2>Transaksi</h2>  
         </div>
         <div class="transaksi-details">
             <label>Kode Transaksi:</label> <span>{{$transaksi->kode_transaksi}}</span><br>
@@ -94,7 +94,7 @@
                         <th>Produk</th>
                         <th>harga</th>
                         <th>Jumlah</th>
-                        <th>Diskon</th>
+                        <th>Diskon</th>     
                         <th>Subtotal</th>
                     </tr>
                 </thead>
